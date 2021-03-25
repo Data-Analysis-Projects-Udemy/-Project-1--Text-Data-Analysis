@@ -7,6 +7,12 @@
 4. [Vamos a comprobar si hay nulos y si hay nulos los eliminamos.](#schema4)
 5. [Vamos a crear una lista con todas la polaridades de los comentarios y añadirlo al dataset como una columna nueva](schema5)
 #  b.- Representación de Wordcloud de Sentimientos
+6. [Creamos un dataset nuevo que solo contenga los valores de polarity = 1](#schema6)
+7. [Instalamos WordCloud e importamos la librería](#schema7)
+8. [Creamos la lista de `STOPWORDS` y hacemos que los comentarios es una cadena](#schema8)
+9. [Creamos el tamaño de imagen](#schema9)
+10. [Dibujamos la figura con el texto más positivo](#schema10)
+11. [Dibujamos la figura con el texto más negativo](#schema11)
 
 <hr>
 
@@ -130,9 +136,59 @@ comments_positive.shape
 
 # 7. Instalamos WordCloud e importamos la librería
 
+https://amueller.github.io/word_cloud/auto_examples/masked.html?highlight=stopwords
 ~~~python
 conda install -c conda-forge wordcloud
 ~~~
 ~~~python
-form wordcloud import WordCloud
+from wordcloud import WordCloud,STOPWORDS
 ~~~
+<hr>
+
+<a name="schema8"></a>
+
+# 8 Creamos la lista de `STOPWORDS` y hacemos que los comentarios es una cadena
+~~~python
+stopwords = set(STOPWORDS)
+total_comments = " ".join(comments_positive["comment_text"])
+~~~
+
+<hr>
+
+<a name="schema9"></a>
+
+# 9. Creamos el tamaño de imagen
+~~~python
+wordcloud = WordCloud(width = 1000, height= 500, stopwords= stopwords).generate(total_comments)
+~~~
+
+<hr>
+
+<a name="schema10"></a>
+
+# 10. Dibujamos la figura con el texto más positivo
+~~~python
+plt.figure(figsize=(15,5))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.savefig("./images/WordCloud.png")
+~~~
+![worlcloud](./images/WordCloud.png)
+
+<hr>
+
+<a name="schema11"></a>
+
+# 11. Dibujamos la figura con el texto más negativo
+~~~python
+comments_negative = comments[comments["polarity"] == -1]
+total_comments_neg = " ".join(comments_negative["comment_text"])
+
+wordcloud = WordCloud(width = 1000, height= 500, stopwords= stopwords).generate(total_comments_neg)
+
+plt.figure(figsize=(15,5))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.savefig("./images/WordCloud_neg.png")
+~~~
+![worlcloud](./images/WordCloud_neg.png)
