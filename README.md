@@ -14,6 +14,7 @@
 10. [Dibujamos la figura con el texto más positivo](#schema10)
 11. [Dibujamos la figura con el texto más negativo](#schema11)
 
+# c.- Analizar etiquetas de tendencias y vistas de Youtube
 <hr>
 
 <a name="schema0"></a>
@@ -152,6 +153,7 @@ from wordcloud import WordCloud,STOPWORDS
 stopwords = set(STOPWORDS)
 total_comments = " ".join(comments_positive["comment_text"])
 ~~~
+![img](./images/011.png)
 
 <hr>
 
@@ -192,3 +194,87 @@ plt.axis("off")
 plt.savefig("./images/WordCloud_neg.png")
 ~~~
 ![worlcloud](./images/WordCloud_neg.png)
+
+
+<hr>
+
+<a name="schema12"></a>
+
+# 12. Cargamos librerías y datos
+
+~~~python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import re
+videos = pd.read_csv("./data/USvideos.csv", error_bad_lines = False)
+~~~
+![img](./images/012.png)
+<hr>
+
+<a name="schema13"></a>
+
+# 13 . Creamos una cadena con todos los tags y le aplicamos una expersión regular
+Primero le quitamos cualquier símbolo que no sean letras, 
+Segundo le quitamos si tiene más de un espacio
+~~~python
+tags_complete = " ".join(videos["tags"])
+~~~
+![img](./images/013.png)
+~~~python
+tags = re.sub('[^a-zA-Z]',' ', tags_complete)
+~~~
+![img](./images/014.png)
+~~~python
+tags = re.sub(' +', ' ', tags)
+~~~
+![img](./images/015.png)
+<hr>
+
+<a name="schema14"></a>
+
+# 14. Dibujamos la figura con tags
+
+~~~
+stopwords = set(STOPWORDS)
+wordcloud = WordCloud(width = 1000, height= 500, stopwords= stopwords).generate(total_comments_neg)
+
+plt.figure(figsize=(15,5))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.savefig("./images/WordCloud_neg.png")
+~~~
+![worlcloud](./images/WordCloud_tags.png)
+
+<hr>
+
+<a name="schema15"></a>
+
+# 15. Dibujamos regresiones con los likes y dislikes
+
+~~~python
+sns.regplot(data = videos, x = "views", y = "likes")
+plt.title("Regression plot for views & likes")
+plt.savefig("./images/regression.png")
+~~~
+![regression](./images/regression.png)
+~~~python
+sns.regplot(data = videos, x = "views", y = "dislikes")
+plt.title("Regression plot for views & dislikes")
+plt.savefig("./images/regression_dislikes.png")
+~~~
+![regression](./images/regression_dislikes.png)
+
+
+<hr>
+
+<a name="schema16"></a>
+
+# 16. Vamos a generar una matrix de correlacción
+~~~python
+sns.heatmap(df_corr.corr(), annot =True)
+plt.title("Correlation")
+plt.savefig("./images/corr.png")
+~~~
+![corr](./images/regression_dislikes.png)
