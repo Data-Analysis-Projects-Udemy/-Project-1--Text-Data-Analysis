@@ -1,6 +1,6 @@
 # Project-1: Text Data Analysis
 # a.- Realización de análisis de sentimiento
-0. [Insalamos la librería  textblob](#schema0)
+0. [Insalamos la librería  textblob y organización de los archivos](#schema0)
 1. [Importamos librerías](#schema1)
 2. [Cargamos los datos](#schema2)
 3. [Vamos hacer una prueba de análisis de una frase](#schema3)
@@ -14,12 +14,26 @@
 10. [Dibujamos la figura con el texto más positivo](#schema10)
 11. [Dibujamos la figura con el texto más negativo](#schema11)
 
-# c.- Analizar etiquetas de tendencias y vistas de Youtube
+# c.- Analizar etiquetas de tendencias 
+12. [Cargamos librerías y datos](#schema12)
+13. [Creamos una cadena con todos los tags y le aplicamos una expersión regular](#schema13)
+14. [Dibujamos la figura con tags](#schema14)
+15. [Dibujamos regresiones con los likes y dislikes](#schema15)
+16. [Vamos a generar una matrix de correlacción](#schema16)
+
+# d.- Realizar el análisis de Emoji
+17. [Installar libreria emoji](#schema17)
+18. [Guardando los posibles emojis](#schema18)
+19. [Crear el diccionario con los emojis y las veces que se repiten](#schema19)
+20. [Order el diccionario y guardarlo en dataframe](#schema20)
+
+
+
 <hr>
 
 <a name="schema0"></a>
 
-# 0. Instalamos la librería textblob
+# 0. Instalamos la librería textblob y organización de los archivos
 
 Nosotros lo instalamos con conda porque estamos trabajando con un environment de conda
 ~~~python
@@ -29,7 +43,9 @@ Documentación
 
 https://textblob.readthedocs.io/en/dev/
 
-
+`Text-Data-Analysis.ipynb`: En esta archivo se realizan los partados a y b
+`Trending Tags.ipnyb` : En este se realiza el aparado c.
+`emoji.ipnyb` : En este se realiza el aparado d.
 
 <hr>
 
@@ -278,3 +294,58 @@ plt.title("Correlation")
 plt.savefig("./images/corr.png")
 ~~~
 ![corr](./images/regression_dislikes.png)
+
+
+
+
+<hr>
+
+<a name="schema17"></a>
+
+# 17. Installar libreria emoji
+~~~python
+conda install -c conda-forge emoji
+~~~
+
+<hr>
+
+<a name="schema18"></a>
+
+# 18. Guardando los posibles emojis
+
+~~~python
+emojis = ""
+for comment in comments["comment_text"]:
+    for char in comment:
+        if char in emoji.UNICODE_EMOJI_ENGLISH:
+            emojis = emojis+char
+~~~
+
+<hr>
+
+<a name="schema19"></a>
+
+# 19. Crear el diccionario con los emojis y las veces que se repiten
+~~~python
+result = {}
+for e in set(emojis):
+    result[e] = emojis.count(e)
+~~~
+![img](./images/018.png)
+<hr>
+
+<a name="schema20"></a>
+
+# 20. Order el diccionario y guardarlo en dataframe
+
+
+~~~python
+final = {}
+for key,values in sorted(result.items(), key = lambda item:item[1]):
+    final[key] = values
+key = [*final.keys()]
+values = [*final.values()]
+
+df = pd.DataFrame({"chars":key[-20:], "num":values[-20:]})
+~~~
+![img](./images/019.png)
