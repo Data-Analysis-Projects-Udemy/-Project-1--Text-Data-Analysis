@@ -1,11 +1,12 @@
 # Project-1: Text Data Analysis
-# 1. Realización de análisis de sentimiento
+# a.- Realización de análisis de sentimiento
 0. [Insalamos la librería  textblob](#schema0)
 1. [Importamos librerías](#schema1)
 2. [Cargamos los datos](#schema2)
 3. [Vamos hacer una prueba de análisis de una frase](#schema3)
 4. [Vamos a comprobar si hay nulos y si hay nulos los eliminamos.](#schema4)
 5. [Vamos a crear una lista con todas la polaridades de los comentarios y añadirlo al dataset como una columna nueva](schema5)
+#  b.- Representación de Wordcloud de Sentimientos
 
 <hr>
 
@@ -40,6 +41,7 @@ from textblob import TextBlob
 <a name="schema2"></a>
 
 # 2. Cargamos los datos
+Los datos que vamos a usar estan alojados aqui: https://drive.google.com/drive/u/0/folders/10owYwrtRQIRCawOFgZy1qY7gG3ta8VfS
 Al cargarlo así nos da un error:
 ~~~python
 comments = pd.read_csv("./data/GBcomments.csv")
@@ -104,4 +106,33 @@ for comment in comments["comment_text"]:
     polarity.append(TextBlob(comment).sentiment.polarity)
 
 comments["polarity"] = polarity
+~~~
+![img](./images/008.png)
+<hr>
+
+<a name="schema6"></a>
+
+# 6.  Creamos un dataset nuevo que solo contenga los valores de polarity = 1
+
+~~~python
+comments_positive = comments[comments["polarity"] == 1]
+comments_positive.head()
+~~~
+![img](./images/009.png)
+~~~python
+comments_positive.shape
+~~~
+![img](./images/010.png)
+
+<hr>
+
+<a name="schema7"></a>
+
+# 7. Instalamos WordCloud e importamos la librería
+
+~~~python
+conda install -c conda-forge wordcloud
+~~~
+~~~python
+form wordcloud import WordCloud
 ~~~
